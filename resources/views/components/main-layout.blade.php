@@ -33,21 +33,21 @@
             <div class="menu-bar">
                 <div class="menu">
     
-                    <li class="search-box">
+                    <!--<li class="search-box">
                         <i class='bx bx-search icon'></i>
                         <input type="text" placeholder="Search...">
-                    </li>
+                    </li>-->
     
-                    <ul class="menu-links">
+                    <ul class="menu-links" style="padding-left: 0">
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="{{route('dashboard')}}">
                                 <i class='bx bx-home-alt icon' ></i>
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
     
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="{{route('report')}}">
                                 <i class='bx bx-bar-chart-alt-2 icon' ></i>
                                 <span class="text nav-text">Reports</span>
                             </a>

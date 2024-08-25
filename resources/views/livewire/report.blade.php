@@ -7,8 +7,15 @@ new class extends Component {
 }; ?>
 
 <div class="container-sm">
-    <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
-    <button wire:click="feedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
+    <div class="w-25">
+        <label for="startDate">Start</label>
+        <input id="startDate" class="form-control" type="date" />
+        <label for="endDate">End</label>
+        <input id="endDate" class="form-control" type="date" />
+        <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">View Report</button>
+        <button wire:click="feedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
+    </div>
+
     <table class="table text-center">
         <thead>
           <tr>
