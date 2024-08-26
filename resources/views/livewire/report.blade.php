@@ -9,9 +9,9 @@ new class extends Component {
 <div class="container-sm">
     <div class="w-25">
         <label for="startDate">Start</label>
-        <input id="startDate" class="form-control" type="date" />
+        <input id="startDate" class="form-control" type="datetime-local" />
         <label for="endDate">End</label>
-        <input id="endDate" class="form-control" type="date" />
+        <input id="endDate" class="form-control" type="datetime-local" />
         <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">View Report</button>
         <button wire:click="feedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
     </div>
@@ -33,10 +33,6 @@ new class extends Component {
               <td>{{$res['name']}}</td>
               <td>{{$res['unit']}}</td>
               <td>{{$res['date-created']}}</td>
-              <td>
-                <button wire:click="openEdit({{$res['id']}})" type="button" class="btn btn-sm btn-success">Edit</button>
-                <button wire:click="openDelete({{$res['id']}})" type="button" class="btn btn-sm btn-danger">Delete</button>
-              </td>
             </tr>
           @endforeach
         </tbody>

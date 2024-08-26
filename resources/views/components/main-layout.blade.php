@@ -14,7 +14,7 @@
         @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js'])
         
     </head>
-    <body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <body class="font-sans antialiased dark:bg-black dark:text-white/50 dark">
         <nav class="sidebar">
             <header>
                 <div class="image-text">
@@ -63,19 +63,19 @@
                 </div>
     
                 <div class="bottom-content">
-                    <li class="">
+                    <!--<li class="">
                         <a href="#">
                             <i class='bx bx-log-out icon' ></i>
                             <span class="text nav-text">Logout</span>
                         </a>
-                    </li>
+                    </li>-->
     
                     <li class="mode">
                         <div class="sun-moon">
                             <i class='bx bx-moon icon moon'></i>
                             <i class='bx bx-sun icon sun'></i>
                         </div>
-                        <span class="mode-text text">Dark mode</span>
+                        <span class="mode-text text">Light mode</span>
     
                         <div class="toggle-switch">
                             <span class="switch"></span>
@@ -93,32 +93,27 @@
         </section>
 
         <script>
-            const body = document.querySelector('body'),
-            sidebar = body.querySelector('nav'),
-            toggle = body.querySelector(".toggle"),
-            searchBtn = body.querySelector(".search-box"),
-            modeSwitch = body.querySelector(".toggle-switch"),
-            modeText = body.querySelector(".mode-text");
+        const body = document.querySelector('body'),
+        sidebar = body.querySelector('nav'),
+        toggle = body.querySelector(".toggle"),
+        modeSwitch = body.querySelector(".toggle-switch"),
+        modeText = body.querySelector(".mode-text");
 
 
-        toggle.addEventListener("click", () => {
-            sidebar.classList.toggle("close");
-        })
+    toggle.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+    })
 
-        searchBtn.addEventListener("click", () => {
-            sidebar.classList.remove("close");
-        })
+    modeSwitch.addEventListener("click", () => {
+        body.classList.toggle("dark");
 
-        modeSwitch.addEventListener("click", () => {
-            body.classList.toggle("dark");
+        if (body.classList.contains("dark")) {
+            modeText.innerText = "Light mode";
+        } else {
+            modeText.innerText = "Dark mode";
 
-            if (body.classList.contains("dark")) {
-                modeText.innerText = "Light mode";
-            } else {
-                modeText.innerText = "Dark mode";
-
-            }
-        });
+        }
+    });
         </script>
     </body>
 </html>
