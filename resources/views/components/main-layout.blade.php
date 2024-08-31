@@ -56,7 +56,7 @@
                         <li class="nav-link">
                             <a href="#">
                                 <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Notifications</span>
+                                <span class="text nav-text">Feed Monitoring</span>
                             </a>
                         </li>  
                     </ul>
