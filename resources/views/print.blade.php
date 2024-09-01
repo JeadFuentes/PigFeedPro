@@ -87,7 +87,6 @@
       <div class="container text-center">
         <div class="row" style="  ">
           <div class="col" style="flex: 1 0 0%;">
-            <h1>REGULAR</h1>
               <table class="table-striped table-responsive table-hover result-point">
                 <thead class="point-table-head">
                   <tr>
@@ -111,7 +110,7 @@
                   <tr>
                     <th><h3>TOTAL</h3></th>
                     <th></th>
-                    <th><h3>{{$pdfdata['data']->count();}}</h3></th>
+                    <th><h3>{{$pdfdata['total'];}} kg</h3></th>
                   </tr>
                 </tbody>
               </table>

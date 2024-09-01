@@ -42,9 +42,11 @@ new class extends Component {
 
     public function print(){
       $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
-  
+      $total = $feeds->sum('unit');
+
         $pdfdata = [
             'data' => $feeds,
+            'total' => $total,
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
           ];
@@ -58,11 +60,16 @@ new class extends Component {
 
 <div class="container-sm">
     <div class="w-25">
-        <label for="startDate" class="text" style="font-size: 15px; padding-left:0">Start Date</label>
-        <input wire:model="startDate" id="startDate" name="startDate" class="form-control" type="datetime-local" step="1" />
-        
-        <label for="endDate" class="text" style="font-size: 15px; padding-left:0">End Date</label>
-        <input wire:model="endDate" id="endDate" name="endDate" class="form-control" type="datetime-local" step="1"/>
+      <div class="d-flex flex-row">
+        <div class="p-2">
+          <label for="startDate" class="text" style="font-size: 15px; padding-left:0">Start Date</label>
+          <input wire:model="startDate" id="startDate" name="startDate" class="form-control" type="datetime-local" step="1" />
+        </div>
+        <div class="p-2">
+          <label for="endDate" class="text" style="font-size: 15px; padding-left:0">End Date</label>
+          <input wire:model="endDate" id="endDate" name="endDate" class="form-control" type="datetime-local" step="1"/>
+        </div>
+      </div>       
         
         <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
         <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>

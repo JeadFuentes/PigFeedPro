@@ -34,7 +34,7 @@ new class extends Component {
     public function newDepartment(){
         $validated = $this->validate([
             'desc' => ['required', 'string', 'max:255'],
-            'unit' => ['required', 'string', 'max:255'],
+            'unit' => ['required', 'numeric', 'max:255'],
             'feed' => ['required'], 
         ]);
 
@@ -55,7 +55,7 @@ new class extends Component {
 
         Feeding::create([
           'desc' => 'Feed Now',
-          'unit' => '1 kg',
+          'unit' => '1',
           'time' => $newDateTime,
           'status' => 'done',
         ]);
@@ -165,7 +165,7 @@ new class extends Component {
         
                 <div>
                     <label for="unit" class="form-label">UNIT/KG</label>
-                    <input type="text" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
+                    <input type="number" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
                       @error('unit')
                         <p class="text-danger">This field is needed</p>
                      @enderror
