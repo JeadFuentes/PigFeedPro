@@ -1,7 +1,6 @@
 <?php
 
 use Livewire\Volt\Component;
-use Illuminate\Support\Arr;
 use App\Models\Feeding;
 use Carbon\Carbon;
 
@@ -26,6 +25,7 @@ new class extends Component {
             ];
         }
     }
+
     //addnew
     public function addNew(){
       $this->dispatch('openAddNewModal');
@@ -193,7 +193,7 @@ new class extends Component {
   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-succes">
+        <div class="modal-header bg-success">
           <h1 class="modal-title fs-5" id="editModalLabel">EDIT FEEDING SCHEDULE</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>

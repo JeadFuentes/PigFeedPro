@@ -1,19 +1,71 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Models\Feeding;
+use Carbon\Carbon;
 
 new class extends Component {
     public $result = [];
+
+    public $startDate;
+    public $endDate;
+
+    public function mount(){
+        $feeds = Feeding::orderBy('status','DESC')->get();
+
+        foreach ($feeds as $feed) {
+                $this->result [] =[
+                'id' => $feed->id,
+                'desc' => $feed->desc,
+                'unit' => $feed->unit,
+                'time' => $feed->time,
+                'status' => $feed->status,
+            ];
+        }
+    }
+
+    public function preview(){
+      $this->result = [];
+
+      $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
+
+        foreach ($feeds as $feed) {
+                $this->result [] =[
+                'id' => $feed->id,
+                'desc' => $feed->desc,
+                'unit' => $feed->unit,
+                'time' => $feed->time,
+                'status' => $feed->status,
+            ];
+        }
+    }
+
+    public function print(){
+      $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
+  
+        $pdfdata = [
+            'data' => $feeds,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
+          ];
+
+        $pdf = Pdf::loadView('print', ['pdfdata' => $pdfdata])->setPaper('a4', 'landscape');
+        return response()->streamDownload(function () use ($pdf) {
+        echo $pdf->stream();
+        }, 'Feeding Report.pdf');
+    }
 }; ?>
 
 <div class="container-sm">
     <div class="w-25">
-        <label for="startDate">Start</label>
-        <input id="startDate" class="form-control" type="datetime-local" />
-        <label for="endDate">End</label>
-        <input id="endDate" class="form-control" type="datetime-local" />
-        <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">View Report</button>
-        <button wire:click="feedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
+        <label for="startDate" class="text" style="font-size: 15px; padding-left:0">Start Date</label>
+        <input wire:model="startDate" id="startDate" name="startDate" class="form-control" type="datetime-local" step="1" />
+        
+        <label for="endDate" class="text" style="font-size: 15px; padding-left:0">End Date</label>
+        <input wire:model="endDate" id="endDate" name="endDate" class="form-control" type="datetime-local" step="1"/>
+        
+        <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
+        <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
     </div>
 
     <table class="table text-center">
@@ -30,50 +82,32 @@ new class extends Component {
             @foreach ($this->result as $res)
             <tr>
               <td>{{$res['id']}}</td>
-              <td>{{$res['name']}}</td>
+              <td>{{$res['desc']}}</td>
               <td>{{$res['unit']}}</td>
-              <td>{{$res['date-created']}}</td>
+              <td>{{$res['time']}}</td>
+              <td>{{$res['status']}}</td>
             </tr>
           @endforeach
         </tbody>
       </table>
-
-      <!-- Add New -->
-  <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-success">
-          <h1 class="modal-title fs-5" id="newModalLabel">ADD NEW DEPARTMENT</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form wire:submit="newDepartment" class="space-y-6">
-                <div>
-                    <label for="name" :value="__('Name')" ></label>>
-                    <input type="text" wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full text-uppercase" required autofocus autocomplete="name" />
-                    @error('unit')
-                        <p class="text-danger">This field is needed</p>
-                    @enderror
-                </div>
-        
-                <div>
-                    <label for="unit" :value="__('Unit')" ></label>>
-                    <input type="text" wire:model="unit" id="unit" name="unit" type="text" class="mt-1 block w-full text-uppercase" required autocomplete="unit" />
-                      @error('unit')
-                        <p class="text-danger">This field is needed</p>
-                     @enderror
-                </div>
-        
-                <div class="mt-6 flex justify-end">
-                    <button name="cancel">{{ __('Cancel') }}</button>
-        
-                    <div class="flex items-center gap-4">
-                      <button type="submit" name="submit">{{ __('Save') }}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
+@script
+  <script>
+      let x = document.getElementById("startDate");
+      let y = document.getElementById("endDate");
+      x.addEventListener("change", start);
+      y.addEventListener("change", end);
+
+    function start() {
+      var val = x.value;
+      val = val.replace("T", " ");
+      @this.startDate = val;
+    }
+
+    function end() {
+      var val = y.value;
+      val = val.replace("T", " ");
+      @this.endDate = val;
+    }
+  </script>
+@endscript
