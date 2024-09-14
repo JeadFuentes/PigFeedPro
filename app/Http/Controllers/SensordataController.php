@@ -16,13 +16,17 @@ class SensordataController extends Controller
     public function index()
     {
         $results = Feeding::all();
+        $res = [
+            'action' => 'feed'
+        ];
+        return response()->json($res);
 
-        foreach ($results as $result){
+       /* foreach ($results as $result){
             if ($result->time == carbon::now()->format('Y-m-d H:i:00'))
             {
-                return 'FEED NOW';
+                return response()->json($sensorData);
             }
-        }
+        }*/
     }
 
     /**
@@ -36,7 +40,7 @@ class SensordataController extends Controller
 
         $post =  Sensordata::create($data);
 
-        return $post;
+        return response()->json(['success' => true, 'data' => $post], 201);
     }
 
     /**
