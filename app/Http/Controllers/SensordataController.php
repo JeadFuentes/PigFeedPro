@@ -16,17 +16,25 @@ class SensordataController extends Controller
     public function index()
     {
         $results = Feeding::all();
-        $res = [
-            'action' => 'feed'
-        ];
-        return response()->json($res);
+        
 
-       /* foreach ($results as $result){
-            if ($result->time == carbon::now()->format('Y-m-d H:i:00'))
+       foreach ($results as $result){
+            if ($result['time'] == carbon::now()->format('Y-m-d H:i:00'))
             {
-                return response()->json($sensorData);
+                $res = [
+                    'action' => 'feed'
+                ];
+                //add functyion to edit the status
+                return response()->json($res);
             }
-        }*/
+        }
+
+        $nextTime = Feeding::where('status', 'pending')
+                   ->orderBy('time', 'desc')
+                   ->pluck('time')
+                   ->first();
+                $nextTimeText = (string) $nextTime;
+                return response()->json($nextTimeText);
     }
 
     /**
