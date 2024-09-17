@@ -24,7 +24,17 @@ class SensordataController extends Controller
                 $res = [
                     'action' => 'feed'
                 ];
-                //add functyion to edit the status
+                //add function to edit the status
+                $feeding = Feeding::find($result['id']);
+
+                $validated = [
+                    'status' => 'done',
+                ];
+
+                $feeding->fill($validated);
+
+                $feeding->save();
+
                 return response()->json($res);
             }
         }

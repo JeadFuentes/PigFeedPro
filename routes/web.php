@@ -13,3 +13,7 @@ Route::get('/report', function () {
 Route::get('/print', function () {
     return view('print');
 })->name('print');
+
+Route::get('/monitoring', function () {
+    return view('monitoring');
+})->name('monitoring');
