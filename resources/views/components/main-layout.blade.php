@@ -54,7 +54,7 @@
                         </li>
     
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="{{route('monitoring')}}">
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Feed Monitoring</span>
                             </a>
