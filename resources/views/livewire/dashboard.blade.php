@@ -50,6 +50,10 @@ new class extends Component {
     }
 
     //feedNow
+    public function openFeedNow(){
+      $this->dispatch('openFeedNowModal');
+    }
+
     public function feedNow(){
       $newDateTime = Carbon::now()->addMinute(1)->format('Y-m-d H:i:00');
 
@@ -114,7 +118,7 @@ new class extends Component {
 
 <div class="container-sm">
     <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
-    <button wire:click="feedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
+    <button wire:click="openFeedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
     <table class="table text-center">
         <thead>
           <tr>
@@ -261,12 +265,36 @@ new class extends Component {
                   </p>
           
                   <div class="mt-6 flex justify-end">
-                      <button wire:click="$dispatch('close')" class="btn btn-success">
-                          {{ __('Cancel') }}
-                      </button>
-          
                       <button class="ms-3 btn btn-danger">
-                          {{ __('Delete Account') }}
+                          {{ __('Delete Schedule') }}
+                      </button>
+                  </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FeedNow Confirmation -->
+    <div class="modal fade" id="feedNowModal" tabindex="-1" aria-labelledby="feedNowModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form wire:submit="feedNow">
+  
+                  <h2 class="text-lg font-medium text-green-900 dark:text-green-100">
+                      {{ __('Are you sure you want to Feeding now?')}}
+                  </h2>
+          
+                  <p class="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {{ __('Once the Feeding is started it cannot be aborted') }}
+                  </p>
+          
+                  <div class="mt-6 flex justify-end">
+                      <button class="ms-3 btn btn-success">
+                          {{ __('Feed Now') }}
                       </button>
                   </div>
               </form>
@@ -287,8 +315,12 @@ new class extends Component {
     $wire.on('showDeleteModal', () => {
       $('#deleteModal').modal('show');
     });
+    $wire.on('openFeedNowModal', () => {
+      $('#feedNowModal').modal('show');
+    });
     $wire.on('close', () => {
       $('#deleteModal').modal('hide');
+      $('#feedNowModal').modal('hide');
       $('#editModal').modal('hide');
       $('#addNewModal').modal('hide');
     });
