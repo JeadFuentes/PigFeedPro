@@ -19,7 +19,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="{{"build/PigFeedPro.png"}}" alt="PigFeedPro">
+                        <img src="{{"storage/PigFeedPro.png"}}" alt="PigFeedPro">
                     </span>
     
                     <div class="text logo-text">

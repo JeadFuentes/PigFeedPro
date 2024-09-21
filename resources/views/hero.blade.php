@@ -17,12 +17,12 @@
     <body>
         <div class="hero">
             <video autoplay muted loop class="background-video">
-                <source src="{{"build/swine.mp4"}}" type="video/mp4">
+                <source src="{{"storage/swine.mp4"}}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <div class="overlay"></div>
             <div class="content">
-                <img src="{{"build/PigFeedPro.png"}}" alt="PigFeedPro Logo" class="logo">
+                <img src="{{"storage/PigFeedPro.png"}}" alt="PigFeedPro Logo" class="logo">
                 <h1>PigFeedPro</h1>
                 <p>"In pig farming, feed management can be challenging and labor-intensive. Manual feeding practices often result in overfeeding, underfeeding, 
                     or uneven distribution of feed. Moreover, the lack of real-time monitoring and data collection makes it difficult for farmers to accurately 
