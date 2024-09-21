@@ -285,7 +285,7 @@ new class extends Component {
               <form wire:submit="feedNow">
   
                   <h2 class="text-lg font-medium text-green-900 dark:text-green-100">
-                      {{ __('Are you sure you want to Feeding now?')}}
+                      {{ __('Are you sure you want to Feed now?')}}
                   </h2>
           
                   <p class="mt-1 text-sm text-red-600 dark:text-red-400">
