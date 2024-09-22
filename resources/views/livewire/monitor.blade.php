@@ -2,14 +2,24 @@
 
 use Livewire\Volt\Component;
 use App\Models\Sensordata;
+use Carbon\Carbon;
 
 new class extends Component {
     public $level;
 
     public function mount(){
-        $this->level = Sensordata::orderBy('id', 'desc')
+        $cutoffDate = Carbon::now()->subDays(2);
+        Sensordata::where('created_at', '<', $cutoffDate)->delete();
+
+        $level = Sensordata::orderBy('id', 'desc')
                    ->pluck('level')
                    ->first();
+        if ($level > 0) {
+            $this->level = $level;
+        }
+        else{
+            $this->level = 0;
+        }
     }
 }; ?>
 
