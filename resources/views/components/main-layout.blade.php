@@ -37,28 +37,50 @@
                         <i class='bx bx-search icon'></i>
                         <input type="text" placeholder="Search...">
                     </li>-->
-    
+
                     <ul class="menu-links" style="padding-left: 0">
-                        <li class="nav-link">
-                            <a href="{{route('dashboard')}}">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Dashboard</span>
-                            </a>
-                        </li>
-    
-                        <li class="nav-link">
-                            <a href="{{route('report')}}">
-                                <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                                <span class="text nav-text">Reports</span>
-                            </a>
-                        </li>
-    
-                        <li class="nav-link">
-                            <a href="{{route('monitoring')}}">
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Feed Monitoring</span>
-                            </a>
-                        </li>  
+                        @if ($level <= 30)
+                            <li class="nav-link">
+                                <a href="{{route('dashboard')}}">
+                                    <i class='bx bx-home-alt icon' ></i>
+                                    <span class="text nav-text">Dashboard</span>
+                                </a>
+                            </li>
+        
+                            <li class="nav-link">
+                                <a href="{{route('report')}}">
+                                    <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                                    <span class="text nav-text">Reports</span>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-link" style="background-color: red;">
+                                <a href="{{route('monitoring')}}">
+                                    <i class='bx bx-bell icon'></i>
+                                    <span class="text nav-text">Feed Monitoring !</span>
+                                </a>
+                            </li>  
+                        @else
+                            <li class="nav-link">
+                                <a href="{{route('dashboard')}}">
+                                    <i class='bx bx-home-alt icon' ></i>
+                                    <span class="text nav-text">Dashboard</span>
+                                </a>
+                            </li>
+        
+                            <li class="nav-link">
+                                <a href="{{route('report')}}">
+                                    <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                                    <span class="text nav-text">Reports</span>
+                                </a>
+                            </li>
+                            <li class="nav-link">
+                                <a href="{{route('monitoring')}}">
+                                    <i class='bx bx-bell icon'></i>
+                                    <span class="text nav-text">Feed Monitoring</span>
+                                </a>
+                            </li>  
+                        @endif
                     </ul>
                 </div>
     

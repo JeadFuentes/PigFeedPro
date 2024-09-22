@@ -11,9 +11,12 @@ class MainLayout extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+
+     public $level;
+
+    public function __construct($level = null)
     {
-        //
+        $this->level = $level;
     }
 
     /**

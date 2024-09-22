@@ -1,8 +1,7 @@
-<x-main-layout>
+<x-main-layout :level="$level">
     <x-slot name="pageName">
         Dashboard
       </x-slot>
-
       @if (session()->has('message'))
         <div class="alert alert-success">
             {{ session('message') }}

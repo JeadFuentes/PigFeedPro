@@ -55,7 +55,7 @@ new class extends Component {
     }
 
     public function feedNow(){
-      $newDateTime = Carbon::now()->addMinute(1)->format('Y-m-d H:i:00');
+      $newDateTime = Carbon::now()->format('Y-m-d H:i:00');
 
         Feeding::create([
           'desc' => 'Feed Now',

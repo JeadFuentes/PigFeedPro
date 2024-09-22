@@ -1,23 +1,20 @@
 <?php
 
+use App\Http\Controllers\SensordataController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('hero');
 })->name('hero');
 
-Route::get('/dashboard', function () {
-    return view('welcome');
-})->name('dashboard');
-
-Route::get('/report', function () {
-    return view('report');
-})->name('report');
-
 Route::get('/print', function () {
     return view('print');
 })->name('print');
 
-Route::get('/monitoring', function () {
-    return view('monitoring');
-})->name('monitoring');
+//Route::get('/monitoring', function () {
+  //  return view('monitoring');
+//})->name('monitoring');
+
+Route::get('/monitoring', [SensordataController::class, 'monitoring'])->name('monitoring');
+Route::get('/report', [SensordataController::class, 'report'])->name('report');
+Route::get('/dashboard', [SensordataController::class, 'dashboard'])->name('dashboard');

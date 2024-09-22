@@ -1,5 +1,5 @@
-<x-main-layout>
-    <x-slot name="pageName">
+<x-main-layout :level="$level">
+    <x-slot name="pageName" >
         FEED MONITORING
       </x-slot>
       <livewire:monitor/>

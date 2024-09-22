@@ -6,6 +6,7 @@ use App\Models\Sensordata;
 use App\Models\Feeding;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateSensordataRequest;
+use Illuminate\Support\Str;
 use carbon\carbon;
 
 class SensordataController extends Controller
@@ -43,8 +44,7 @@ class SensordataController extends Controller
                    ->orderBy('time', 'desc')
                    ->pluck('time')
                    ->first();
-                $nextTimeText = (string) $nextTime;
-                return response()->json($nextTimeText);
+                return ($nextTime);
     }
 
     /**
@@ -59,6 +59,30 @@ class SensordataController extends Controller
         $post =  Sensordata::create($data);
 
         return response()->json(['success' => true, 'data' => $post], 201);
+    }
+
+    public function monitoring(){
+        $levels = Sensordata::orderBy('id', 'desc')
+        ->pluck('level')
+        ->first();
+
+        return view('monitoring', ['level' => $levels]);
+    }
+
+    public function report(){
+        $levels = Sensordata::orderBy('id', 'desc')
+        ->pluck('level')
+        ->first();
+
+        return view('report', ['level' => $levels]);
+    }
+
+    public function dashboard(){
+        $levels = Sensordata::orderBy('id', 'desc')
+        ->pluck('level')
+        ->first();
+
+        return view('welcome', ['level' => $levels]);
     }
 
     /**
