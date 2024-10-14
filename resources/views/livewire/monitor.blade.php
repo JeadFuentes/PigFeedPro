@@ -15,9 +15,10 @@ new class extends Component {
                    ->pluck('level')
                    ->first();
         // 60 is empty 0 is full
-        $level = 100 - $level + 10;
+    
 
         if ($level > 0) {
+            $level = 100 - $level + 10;
             $this->level = $level;
         }
         else{

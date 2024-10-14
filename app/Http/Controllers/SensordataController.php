@@ -67,9 +67,9 @@ class SensordataController extends Controller
         ->first();
 
          // 60 is empty 0 is full
-         $level = 100 - $level + 10;
 
          if ($level > 0) {
+            $level = 100 - $level + 10;
              $level = $level;
          }
          else{
@@ -85,9 +85,9 @@ class SensordataController extends Controller
         ->first();
 
          // 60 is empty 0 is full
-         $level = 100 - $level + 10;
 
          if ($level > 0) {
+            $level = 100 - $level + 10;
              $level = $level;
          }
          else{
@@ -103,9 +103,10 @@ class SensordataController extends Controller
         ->first();
 
          // 60 is empty 0 is full
-         $level = 100 - $level + 10;
+         
 
          if ($level > 0) {
+            $level = 100 - $level + 10;
              $level = $level;
          }
          else{

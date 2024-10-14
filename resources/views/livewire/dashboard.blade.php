@@ -11,7 +11,7 @@ new class extends Component {
     public $result = [];
     public $feedId;
     public string $desc;
-    public float $unit;
+    public float $unit =.5;
     public string $feed;
     public $time;
     public string $status;
@@ -242,7 +242,7 @@ new class extends Component {
         
                 <div>
                     <label for="unit" class="form-label">UNIT/KG</label>
-                    <input type="float" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
+                    <input type="float" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" value=".5" placeholder="0.5" autocomplete="unit" />
                       @error('unit')
                         <p class="text-danger">This field is needed</p>
                      @enderror
