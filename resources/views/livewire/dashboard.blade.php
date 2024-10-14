@@ -11,7 +11,7 @@ new class extends Component {
     public $result = [];
     public $feedId;
     public string $desc;
-    public string $unit;
+    public float $unit;
     public string $feed;
     public $time;
     public string $status;
@@ -39,12 +39,13 @@ new class extends Component {
     public function newDepartment(){
         $validated = $this->validate([
             'desc' => ['required', 'string', 'max:255'],
+            'unit' => ['required'],
             'feed' => ['required'], 
         ]);
 
         Feeding::create([
           'desc' => $validated['desc'],
-          'unit' => 1,
+          'unit' => $validated['unit'],
           'time' => $validated['feed'],
           'status' => 'pending',
         ]);
@@ -63,7 +64,7 @@ new class extends Component {
 
         Feeding::create([
           'desc' => 'Feed Now',
-          'unit' => '1',
+          'unit' => '.5',
           'time' => $newDateTime,
           'status' => 'done',
         ]);
@@ -241,7 +242,7 @@ new class extends Component {
         
                 <div>
                     <label for="unit" class="form-label">UNIT/KG</label>
-                    <input type="number" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" value="0.5" placeholder="0.5" disabled/>
+                    <input type="float" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
                       @error('unit')
                         <p class="text-danger">This field is needed</p>
                      @enderror

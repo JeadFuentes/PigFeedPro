@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('feeding', function (Blueprint $table) {
             $table->id();
             $table->string('desc');
-            $table->integer('unit');
+            $table->float('unit');
             $table->dateTime('time');
             $table->string('status');
             $table->timestamps();
