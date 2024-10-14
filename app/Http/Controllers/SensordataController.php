@@ -62,27 +62,57 @@ class SensordataController extends Controller
     }
 
     public function monitoring(){
-        $levels = Sensordata::orderBy('id', 'desc')
+        $level = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-        return view('monitoring', ['level' => $levels]);
+         // 60 is empty 0 is full
+         $level = 100 - $level + 10;
+
+         if ($level > 0) {
+             $this->level = $level;
+         }
+         else{
+             $this->level = 0;
+         }
+
+        return view('monitoring', ['level' => $level]);
     }
 
     public function report(){
-        $levels = Sensordata::orderBy('id', 'desc')
+        $level = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-        return view('report', ['level' => $levels]);
+         // 60 is empty 0 is full
+         $level = 100 - $level + 10;
+
+         if ($level > 0) {
+             $this->level = $level;
+         }
+         else{
+             $this->level = 0;
+         }
+
+        return view('report', ['level' => $level]);
     }
 
     public function dashboard(){
-        $levels = Sensordata::orderBy('id', 'desc')
+        $level = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-        return view('welcome', ['level' => $levels]);
+         // 60 is empty 0 is full
+         $level = 100 - $level + 10;
+
+         if ($level > 0) {
+             $this->level = $level;
+         }
+         else{
+             $this->level = 0;
+         }
+
+        return view('welcome', ['level' => $level]);
     }
 
     /**

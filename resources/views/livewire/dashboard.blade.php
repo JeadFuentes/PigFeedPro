@@ -10,6 +10,7 @@ new class extends Component {
     public string $desc;
     public string $unit;
     public string $feed;
+    public $time;
     public string $status;
 
     public function mount(){
@@ -34,13 +35,12 @@ new class extends Component {
     public function newDepartment(){
         $validated = $this->validate([
             'desc' => ['required', 'string', 'max:255'],
-            'unit' => ['required', 'numeric', 'max:255'],
             'feed' => ['required'], 
         ]);
 
         Feeding::create([
           'desc' => $validated['desc'],
-          'unit' => $validated['unit'],
+          'unit' => 1,
           'time' => $validated['feed'],
           'status' => 'pending',
         ]);
@@ -75,7 +75,7 @@ new class extends Component {
         $this->feedId = $feeding->id;
         $this->desc = $feeding->desc;
         $this->unit = $feeding->unit;
-        $this->feed = $feeding->time;
+        $this->feedEdit = $feeding->time;
         $this->status = $feeding->status;
         $this->dispatch('showEditModal');
     }
@@ -86,13 +86,11 @@ new class extends Component {
         $validated = $this->validate([
             'feedId' => ['required', 'max:255'],
             'desc' => ['required', 'string', 'max:255'],
-            'unit' => ['required', 'string', 'max:255'],
-            'feed' => ['required'], 
+            'time' => ['required'], 
             'status' => ['required', 'max:255'],
         ]);
 
         $feeding->fill($validated);
-
         $feeding->save();
 
         session()->flash('message', 'Edited Succesfully');
@@ -169,7 +167,7 @@ new class extends Component {
         
                 <div>
                     <label for="unit" class="form-label">UNIT/KG</label>
-                    <input type="number" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
+                    <input type="number" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" value="0.5" placeholder="0.5" disabled/>
                       @error('unit')
                         <p class="text-danger">This field is needed</p>
                      @enderror
@@ -217,15 +215,15 @@ new class extends Component {
     
             <div>
                 <label for="unit" class="form-label">UNIT/KG</label>
-                <input type="text" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" />
+                <input type="text" wire:model="unit" id="unit" name="unit" class="mt-1 block w-full form-control" required autocomplete="unit" disabled/>
                   @error('unit')
                     <p class="text-danger">This field is needed</p>
                  @enderror
             </div>
 
             <div>
-              <label for="feed" class="form-label">FEED TIME</label>
-              <input wire:model="feed" id="feed" name="feed" type="datetime-local" class="mt-1 block w-full form-control" />
+              <label for="time" class="form-label">FEED TIME</label>
+              <input wire:model="time" id="time" name="time" type="datetime-local" class="mt-1 block w-full form-control" />
                 @error('feed')
                   <p class="text-danger">This field is needed</p>
                @enderror
@@ -333,6 +331,16 @@ function myFunction() {
   var val = x.value;
   val = val.replace("T", " ");
   @this.feed = val+':00';
+}
+
+//edit
+var y = document.getElementById("time");
+  y.addEventListener("change", myFunctionEdit);
+
+function myFunctionEdit() {
+  var val = y.value;
+  val = val.replace("T", " ");
+  @this.time = val+':00';
 }
 
  </script>
