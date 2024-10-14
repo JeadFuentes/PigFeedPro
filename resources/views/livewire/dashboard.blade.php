@@ -3,8 +3,11 @@
 use Livewire\Volt\Component;
 use App\Models\Feeding;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 new class extends Component {
+  use WithPagination;
+
     public $result = [];
     public $feedId;
     public string $desc;
@@ -12,19 +15,20 @@ new class extends Component {
     public string $feed;
     public $time;
     public string $status;
+    
+    public $perPage = 5;
 
-    public function mount(){
-        $feeds = Feeding::orderBy('status','DESC')->get();
+    //search
+    public string $searchtxt = '';
 
-        foreach ($feeds as $feed) {
-                $this->result [] =[
-                'id' => $feed->id,
-                'desc' => $feed->desc,
-                'unit' => $feed->unit,
-                'time' => $feed->time,
-                'status' => $feed->status,
-            ];
-        }
+    public $srch;
+
+ 
+
+    public function with(): array{
+        return [
+            'feeds' => Feeding::orderBy('status','DESC')->paginate($this->perPage),
+        ];
     }
 
     //addnew
@@ -112,11 +116,53 @@ new class extends Component {
         session()->flash('message', 'Deleted Succesfully');
         $this->redirect(route('dashboard'));
     }
+
+    public function search()
+    {
+        $this->result = [];
+        if ($this->searchtxt) {
+          $this->srch = 'true';
+          $feeds = Feeding::where('time','like', '%'.$this->searchtxt.'%')->get();
+          foreach ($feeds as $feed) {
+                  $this->result [] =[
+                  'id' => $feed->id,
+                  'desc' => $feed->desc,
+                  'unit' => $feed->unit,
+                  'time' => $feed->time,
+                  'status' => $feed->status,
+              ];
+          }
+        }
+        else {
+          $this->srch = 'false';
+        }
+    }
 }; ?>
 
 <div class="container-sm">
-    <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
-    <button wire:click="openFeedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
+        <button wire:click="openFeedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
+      </div>
+      <div class="col">
+        <form class="form-inline" wire:submit="search">
+          <div class="input-group">
+            <input wire:model="searchtxt" wire:change='search()' id="searchtxt" name="searchtxt" class="form-control" type="search" placeholder="Search Feed Time" aria-label="Search" style="margin-left: 15%">
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
     <table class="table text-center">
         <thead>
           <tr>
@@ -129,23 +175,51 @@ new class extends Component {
           </tr>
         </thead>
         <tbody table-group-divider>
-            @foreach ($this->result as $res)
-            <tr>
-              <td>{{$res['id']}}</td>
-              <td>{{$res['desc']}}</td>
-              <td>{{$res['unit']}}</td>
-              <td>{{$res['time']}}</td>
-              <td>{{$res['status']}}</td>
-              <td>
-                @if ($res['status'] == 'pending')
-                  <button wire:click="openEdit({{$res['id']}})" type="button" class="btn btn-sm btn-success">Edit</button>
-                @endif
-                <button wire:click="openDelete({{$res['id']}})" type="button" class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-          @endforeach
+            @if ($this->srch == 'true')
+              @foreach ($this->result as $res)
+                <tr>
+                  <td>{{$res['id']}}</td>
+                  <td>{{$res['desc']}}</td>
+                  <td>{{$res['unit']}}</td>
+                  <td>{{$res['time']}}</td>
+                  <td>{{$res['status']}}</td>
+                  <td>
+                    @if ($res['status'] == 'pending')
+                      <button wire:click="openEdit({{$res['id']}})" type="button" class="btn btn-sm btn-success">Edit</button>
+                    @endif
+                    <button wire:click="openDelete({{$res['id']}})" type="button" class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              @endforeach
+            @else
+              @foreach ($feeds as $res)
+                <tr>
+                  <td>{{$res['id']}}</td>
+                  <td>{{$res['desc']}}</td>
+                  <td>{{$res['unit']}}</td>
+                  <td>{{$res['time']}}</td>
+                  <td>{{$res['status']}}</td>
+                  <td>
+                    @if ($res['status'] == 'pending')
+                      <button wire:click="openEdit({{$res['id']}})" type="button" class="btn btn-sm btn-success">Edit</button>
+                    @endif
+                    <button wire:click="openDelete({{$res['id']}})" type="button" class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              @endforeach
+            @endif
         </tbody>
       </table>
+      <div class="container-md mt-5">
+        <label for="perPage">Entries per page</label>
+        <select class="form-select w-25" aria-label="Default select example" id="perPage" wire:change='with()'  wire:model="perPage">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+        {{$feeds->links()}}
+      </div>
 
       <!-- Add New -->
   <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">

@@ -70,10 +70,10 @@ class SensordataController extends Controller
          $level = 100 - $level + 10;
 
          if ($level > 0) {
-             $this->level = $level;
+             $level = $level;
          }
          else{
-             $this->level = 0;
+             $level = 0;
          }
 
         return view('monitoring', ['level' => $level]);
@@ -88,10 +88,10 @@ class SensordataController extends Controller
          $level = 100 - $level + 10;
 
          if ($level > 0) {
-             $this->level = $level;
+             $level = $level;
          }
          else{
-             $this->level = 0;
+             $level = 0;
          }
 
         return view('report', ['level' => $level]);
@@ -106,10 +106,10 @@ class SensordataController extends Controller
          $level = 100 - $level + 10;
 
          if ($level > 0) {
-             $this->level = $level;
+             $level = $level;
          }
          else{
-             $this->level = 0;
+             $level = 0;
          }
 
         return view('welcome', ['level' => $level]);

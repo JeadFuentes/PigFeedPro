@@ -14,7 +14,7 @@
         @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js'])
         
     </head>
-    <body class="font-sans antialiased dark:bg-black dark:text-white/50 dark">
+    <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <nav class="sidebar">
             <header>
                 <div class="image-text">
