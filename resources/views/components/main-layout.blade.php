@@ -11,6 +11,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
         <!-- Styles -->
+        @livewireStyles
         @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js'])
         
     </head>
@@ -114,6 +115,7 @@
             {{$slot}}
         </section>
 
+        @livewireScripts
         <script>
         const body = document.querySelector('body'),
         sidebar = body.querySelector('nav'),
@@ -122,20 +124,20 @@
         modeText = body.querySelector(".mode-text");
 
 
-    toggle.addEventListener("click", () => {
-        sidebar.classList.toggle("close");
-    })
+        toggle.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+        })
 
-    modeSwitch.addEventListener("click", () => {
-        body.classList.toggle("dark");
+        modeSwitch.addEventListener("click", () => {
+            body.classList.toggle("dark");
 
-        if (body.classList.contains("dark")) {
-            modeText.innerText = "Light mode";
-        } else {
-            modeText.innerText = "Dark mode";
+            if (body.classList.contains("dark")) {
+                modeText.innerText = "Light mode";
+            } else {
+                modeText.innerText = "Dark mode";
 
-        }
-    });
+            }
+        });
         </script>
     </body>
 </html>

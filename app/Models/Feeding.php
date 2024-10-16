@@ -17,4 +17,14 @@ class Feeding extends Model
         'time',
         'status',
     ];
+
+    public function scopeSearch($query, $val){
+        return $query->where(function($q) use ($val) {
+            $q->where('id', 'like', '%'.$val.'%')
+              ->orWhere('desc', 'like', '%'.$val.'%')
+              ->orWhere('unit', 'like', '%'.$val.'%')
+              ->orWhere('time', 'like', '%'.$val.'%')
+              ->orWhere('status', 'like', '%'.$val.'%');
+        });
+    }
 }
