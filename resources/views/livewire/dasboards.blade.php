@@ -11,7 +11,7 @@ new class extends Component {
     public $sortBy = 'id';
     public $sortDirection = 'asc';
     public $perPage = 5;
-    public $search = 'pending';
+    public $search = '';
 
     public $result = [];
 
@@ -34,6 +34,10 @@ new class extends Component {
         $this->dispatch('reload');
         return $this->sortBy = $field;
     }
+
+    public function updatingSearch(){
+      $this->resetPage();
+    }
 }; ?>
 
 <div class="container">
@@ -49,7 +53,7 @@ new class extends Component {
             </select>
         </div>
         <div class="col">
-            <input wire:model.debounce.300ms="search" class="form-control" type="text" placeholder="search">
+            <input id="searchTxt" class="form-control" type="text" placeholder="search">
         </div>
     </div>
     <table class="table text-center">
@@ -83,3 +87,13 @@ new class extends Component {
     </table>
     {{$feeds->links()}}
 </div>
+@script
+  <script>
+    $(document).ready(function(){
+      $('#searchTxt').on('keyup',function(){
+        @this.search = $(this).val();
+        @this.call('with');
+      })
+    });
+  </script>
+@endscript

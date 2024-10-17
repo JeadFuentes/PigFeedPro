@@ -111,7 +111,7 @@
         </nav>
     
         <section class="home">
-            <div class="text mb-5">{{$pageName}}</div>
+            <div class="text">{{$pageName}}</div>
             {{$slot}}
         </section>
 

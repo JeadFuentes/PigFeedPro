@@ -8,6 +8,6 @@
         </div>
       @endif
       
-      <livewire:dasboards />
+      <livewire:dashboard />
 
 </x-main-layout>

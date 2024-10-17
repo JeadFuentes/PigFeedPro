@@ -15,20 +15,33 @@ new class extends Component {
     public string $feed;
     public $time;
     public string $status;
-    
-    public $perPage = 5;
 
-    //search
-    public string $searchtxt = '';
+    public $sortBy = 'id';
+    public $sortDirection = 'asc';
+    public $perPage = 10;
+    public $search = '';
 
-    public $srch;
-
- 
-
+    #[On('reload')]
     public function with(): array{
         return [
-            'feeds' => Feeding::orderBy('status','DESC')->paginate($this->perPage),
+            'feeds' => Feeding::search($this->search)->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage),
         ];
+    }
+    
+    public function sortingBy($field){
+        if ($this->sortDirection == 'asc'){
+            $this->sortDirection = 'desc';
+        }
+        else{
+            $this->sortDirection = 'asc';
+        }
+
+        $this->dispatch('reload');
+        return $this->sortBy = $field;
+    }
+
+    public function updatingSearch(){
+      $this->resetPage();
     }
 
     //addnew
@@ -117,27 +130,6 @@ new class extends Component {
         session()->flash('message', 'Deleted Succesfully');
         $this->redirect(route('dashboard'));
     }
-
-    public function search()
-    {
-        $this->result = [];
-        if ($this->searchtxt) {
-          $this->srch = 'true';
-          $feeds = Feeding::where('time','like', '%'.$this->searchtxt.'%')->get();
-          foreach ($feeds as $feed) {
-                  $this->result [] =[
-                  'id' => $feed->id,
-                  'desc' => $feed->desc,
-                  'unit' => $feed->unit,
-                  'time' => $feed->time,
-                  'status' => $feed->status,
-              ];
-          }
-        }
-        else {
-          $this->srch = 'false';
-        }
-    }
 }; ?>
 
 <div class="container-sm">
@@ -147,52 +139,35 @@ new class extends Component {
         <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
         <button wire:click="openFeedNow()" type="button" class="btn btn-md btn-success ml-3 mb-3">FEED NOW</button>
       </div>
-      <div class="col">
-        <form class="form-inline" wire:submit="search">
-          <div class="input-group">
-            <input wire:model="searchtxt" wire:change='search()' id="searchtxt" name="searchtxt" class="form-control" type="search" placeholder="Search Feed Time" aria-label="Search" style="margin-left: 15%">
-            <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+    </div>
+  </div>
+  <div class="row mt-2 mb-2">
+    <div class="col form-inline">
+        <p class="d-inline px-3">Per Page:</p>
+        <select wire:model="perPage" wire:change='with()' class="rounded d-inline px-3 w-8">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+            <option>25</option>
+        </select>
+    </div>
+    <div class="col">
+        <input id="searchTxt" class="form-control" type="text" placeholder="search">
     </div>
   </div>
     <table class="table text-center">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th class="text-center">DESC</th>
-            <th class="text-center">UNIT/kg</th>
-            <th class="text-center">FEED TIME</th>
-            <th class="text-center">STATUS</th>
+            <th style="cursor: pointer" wire:click="sortingBy('id')" scope="col">ID &ensp; @include('partials.sort-icon',['field'=>'id'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('desc')" class="text-center">DESC &ensp; @include('partials.sort-icon',['field'=>'desc'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('unit')" class="text-center">UNIT/kg &ensp; @include('partials.sort-icon',['field'=>'unit'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('time')" class="text-center">FEED TIME &ensp; @include('partials.sort-icon',['field'=>'time'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('status')" class="text-center">STATUS &ensp; @include('partials.sort-icon',['field'=>'status'])</th>
             <th class="text-center">ACTION</th>
           </tr>
         </thead>
         <tbody table-group-divider>
-            @if ($this->srch == 'true')
-              @foreach ($this->result as $res)
-                <tr>
-                  <td>{{$res['id']}}</td>
-                  <td>{{$res['desc']}}</td>
-                  <td>{{$res['unit']}}</td>
-                  <td>{{$res['time']}}</td>
-                  <td>{{$res['status']}}</td>
-                  <td>
-                    @if ($res['status'] == 'pending')
-                      <button wire:click="openEdit({{$res['id']}})" type="button" class="btn btn-sm btn-success">Edit</button>
-                    @endif
-                    <button wire:click="openDelete({{$res['id']}})" type="button" class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-              @endforeach
-            @else
               @foreach ($feeds as $res)
                 <tr>
                   <td>{{$res['id']}}</td>
@@ -208,19 +183,9 @@ new class extends Component {
                   </td>
                 </tr>
               @endforeach
-            @endif
         </tbody>
       </table>
-      <div class="container-md mt-5">
-        <label for="perPage">Entries per page</label>
-        <select class="form-select w-25" aria-label="Default select example" id="perPage" wire:change='with()'  wire:model="perPage">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
-        {{$feeds->links()}}
-      </div>
+      {{$feeds->links()}}
 
       <!-- Add New -->
   <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="newModalLabel" aria-hidden="true">
@@ -379,6 +344,13 @@ new class extends Component {
 </div>
 @script
  <script>
+  $(document).ready(function(){
+      $('#searchTxt').on('keyup',function(){
+        @this.search = $(this).val();
+        @this.call('with');
+      })
+    });
+
     $wire.on('openAddNewModal', () => {
       $('#addNewModal').modal('show');
     });

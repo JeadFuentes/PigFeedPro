@@ -3,31 +3,71 @@
 use Livewire\Volt\Component;
 use App\Models\Feeding;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 new class extends Component {
+  use WithPagination;
     public $result = [];
 
     public $startDate;
     public $endDate;
 
-    public function mount(){
-        $feeds = Feeding::orderBy('status','DESC')->get();
+    public $sortBy = 'id';
+    public $sortDirection = 'asc';
+    public $perPage = 10;
+    public $search = '';
 
-        foreach ($feeds as $feed) {
-                $this->result [] =[
-                'id' => $feed->id,
-                'desc' => $feed->desc,
-                'unit' => $feed->unit,
-                'time' => $feed->time,
-                'status' => $feed->status,
-            ];
+    public $rpt = 0;
+
+    #[On('reload')]
+    public function with(): array{
+      
+      if ($this->rpt == 1) {
+        $this->rpt = 0;
+        return [
+            //'feeds' => Feeding::orderBy('status','DESC')->get(),
+            'feeds' => Feeding::search($this->search)
+            ->whereBetween('time',[$this->startDate,$this->endDate])
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->paginate($this->perPage),
+        ];
+      }
+      else{
+        $this->startDate = '';
+        $this->endDate = '';
+        return [
+            //'feeds' => Feeding::orderBy('status','DESC')->get(),
+            'feeds' => Feeding::search($this->search)
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->paginate($this->perPage),
+        ];
+      }
+        
+    }
+
+    public function sortingBy($field){
+        if ($this->sortDirection == 'asc'){
+            $this->sortDirection = 'desc';
         }
+        else{
+            $this->sortDirection = 'asc';
+        }
+
+        $this->dispatch('reload');
+        return $this->sortBy = $field;
+    }
+
+    public function updatingSearch(){
+      $this->resetPage();
     }
 
     public function preview(){
       $this->result = [];
-
-      $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
+      $this->rpt = 1;
+      $feeds = Feeding::search($this->search)
+            ->orwhereBetween('time',[$this->startDate,$this->endDate])
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->get();
 
         foreach ($feeds as $feed) {
                 $this->result [] =[
@@ -38,11 +78,31 @@ new class extends Component {
                 'status' => $feed->status,
             ];
         }
+        
+        $this->dispatch('reload');
     }
 
     public function print(){
-      $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
-      $total = $feeds->sum('unit');
+      if($this->rpt === 1){
+        $total = array_sum(array_column($this->result, 'unit'));
+
+        $pdfdata = [
+            'data' => $this->result,
+            'total' => $total,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
+          ];
+          $this->startDate = '';
+          $this->endDate = '';
+
+        $pdf = Pdf::loadView('print', ['pdfdata' => $pdfdata])->setPaper('a4', 'landscape');
+        return response()->streamDownload(function () use ($pdf) {
+        echo $pdf->stream();
+        }, 'Feeding Report.pdf');
+      }
+      else{
+        $feeds = Feeding::whereBetween('time',[$this->startDate,$this->endDate])->get();
+        $total =  $feeds->sum('unit');
 
         $pdfdata = [
             'data' => $feeds,
@@ -50,16 +110,19 @@ new class extends Component {
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
           ];
+          $this->startDate = '';
+          $this->endDate = '';
 
         $pdf = Pdf::loadView('print', ['pdfdata' => $pdfdata])->setPaper('a4', 'landscape');
         return response()->streamDownload(function () use ($pdf) {
         echo $pdf->stream();
         }, 'Feeding Report.pdf');
+      }
     }
 }; ?>
 
-<div class="container-sm">
-    <div class="w-25">
+<div class="container-sm mb-5">
+    <div class="w-100">
       <div class="d-flex flex-row">
         <div class="p-2">
           <label for="startDate" class="text" style="font-size: 15px; padding-left:0">Start Date</label>
@@ -69,24 +132,38 @@ new class extends Component {
           <label for="endDate" class="text" style="font-size: 15px; padding-left:0">End Date</label>
           <input wire:model="endDate" id="endDate" name="endDate" class="form-control" type="datetime-local" step="1"/>
         </div>
+        <div class="p-2 mx-5 w-25">
+          <label for="searchTxt" class="text" style="font-size: 15px; padding-left:0">Search</label>
+          <input id="searchTxt" class="form-control w-100" type="text" step="1">
+        </div>
       </div>       
-        
-        <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
-        <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
     </div>
+    
+    <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
+    <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
 
+    <div class="form-inline">
+      <p class="d-inline px-3">Per Page:</p>
+      <select wire:model="perPage" wire:change='with()' class="rounded d-inline px-3 w-8">
+          <option>5</option>
+          <option>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>25</option>
+      </select>
+  </div>
     <table class="table text-center">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th class="text-center">DESC</th>
-            <th class="text-center">UNIT/kg</th>
-            <th class="text-center">FEED TIME</th>
-            <th class="text-center">STATUS</th>
+            <th style="cursor: pointer" wire:click="sortingBy('id')" scope="col">ID &ensp; @include('partials.sort-icon',['field'=>'id'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('desc')" class="text-center">DESC &ensp; @include('partials.sort-icon',['field'=>'desc'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('unit')" class="text-center">UNIT/kg &ensp; @include('partials.sort-icon',['field'=>'unit'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('time')" class="text-center">FEED TIME &ensp; @include('partials.sort-icon',['field'=>'time'])</th>
+            <th style="cursor: pointer" wire:click="sortingBy('status')" class="text-center">STATUS &ensp; @include('partials.sort-icon',['field'=>'status'])</th>
           </tr>
         </thead>
         <tbody table-group-divider>
-            @foreach ($this->result as $res)
+            @foreach ($feeds as $res)
             <tr>
               <td>{{$res['id']}}</td>
               <td>{{$res['desc']}}</td>
@@ -96,7 +173,9 @@ new class extends Component {
             </tr>
           @endforeach
         </tbody>
-      </table>
+    </table>
+      {{$feeds->links()}}
+    <br>
 </div>
 @script
   <script>
@@ -116,5 +195,12 @@ new class extends Component {
       val = val.replace("T", " ");
       @this.endDate = val;
     }
+
+    $(document).ready(function(){
+      $('#searchTxt').on('keyup',function(){
+        @this.search = $(this).val();
+        @this.call('with');
+      })
+    });
   </script>
 @endscript
