@@ -128,16 +128,28 @@
             sidebar.classList.toggle("close");
         })
 
+        const savedMode = localStorage.getItem('theme');
+
+        if (savedMode === 'dark') {
+            body.classList.add('dark');
+            modeText.innerText = "Light mode";
+        } else {
+            body.classList.remove('dark');
+            modeText.innerText = "Dark mode";
+        }
+
         modeSwitch.addEventListener("click", () => {
             body.classList.toggle("dark");
 
             if (body.classList.contains("dark")) {
+                localStorage.setItem('theme', 'dark');
                 modeText.innerText = "Light mode";
             } else {
+                localStorage.setItem('theme', 'light');
                 modeText.innerText = "Dark mode";
-
             }
         });
+
         </script>
     </body>
 </html>
