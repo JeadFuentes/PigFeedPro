@@ -143,7 +143,7 @@ new class extends Component {
     <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
 
     <div class="form-inline">
-      <p class="d-inline px-3">Per Page:</p>
+      <p class="d-inline px-3 text" style="font-size: 15px;">Per Page:</p>
       <select wire:model="perPage" wire:change='with()' class="rounded d-inline px-3 w-8">
           <option>5</option>
           <option>10</option>
