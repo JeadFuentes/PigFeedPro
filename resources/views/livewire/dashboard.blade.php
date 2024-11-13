@@ -134,6 +134,7 @@ new class extends Component {
 
 <div class="container-sm">
   <div class="container">
+      <input id="searchTxt" class="form-control mb-3" type="text" placeholder="search">
     <div class="row">
       <div class="col">
         <button wire:click="addNew()" type="button" class="btn btn-md btn-primary ml-3 mb-3">ADD NEW SCHEDULE</button>
@@ -142,7 +143,7 @@ new class extends Component {
     </div>
   </div>
   <div class="row mt-2 mb-2">
-    <div class="col form-inline">
+    <div class="col">
         <p class="d-inline px-3">Per Page:</p>
         <select wire:model="perPage" wire:change='with()' class="rounded d-inline px-3 w-8">
             <option>5</option>
@@ -152,11 +153,8 @@ new class extends Component {
             <option>25</option>
         </select>
     </div>
-    <div class="col">
-        <input id="searchTxt" class="form-control" type="text" placeholder="search">
-    </div>
   </div>
-    <table class="table text-center">
+    <table class="table text-center table-responsive-sm">
         <thead>
           <tr>
             <th style="cursor: pointer" wire:click="sortingBy('id')" scope="col">ID &ensp; @include('partials.sort-icon',['field'=>'id'])</th>

@@ -435,3 +435,69 @@ p {
     }
   }
   
+
+  @media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .hero {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    p {
+        font-size: .8rem;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .content {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        transform: translate(-0%, -0%);
+        color: white;
+        text-align: center;
+        padding: 20px;
+        max-width: 100%;
+    }
+
+    .logo {
+        width: 100px; /* Adjust size as needed */
+        margin-bottom: 15px;
+    }
+
+    .cta-button {
+        background-color: #ffcc00; /* Adjust color as needed */
+        color: black;
+        font-size: 1.2rem;
+        padding: 15px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+
+    .sidebar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 88px;
+        padding: 10px 14px;
+        background: var(--sidebar-color);
+        transition: var(--tran-05);
+        z-index: 100;  
+    }
+
+    .sidebar header .logo-text{
+        display: none;
+    }
+
+    .mode-text{
+        display: none;
+    }
+
+    .home{
+        position: absolute;
+        top: 0;
+        left: 100px;
+    }
+  }

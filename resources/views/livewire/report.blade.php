@@ -122,8 +122,11 @@ new class extends Component {
 }; ?>
 
 <div class="container-sm mb-5">
+  <div class="p-2 w-100">
+    <input id="searchTxt" class="form-control w-100" type="text" step="1" placeholder="Search">
+  </div>
     <div class="w-100">
-      <div class="d-flex flex-row">
+      <div class="d-sm-inline-flex flex-row">
         <div class="p-2">
           <label for="startDate" class="text" style="font-size: 15px; padding-left:0">Start Date</label>
           <input wire:model="startDate" id="startDate" name="startDate" class="form-control" type="datetime-local" step="1" />
@@ -132,15 +135,16 @@ new class extends Component {
           <label for="endDate" class="text" style="font-size: 15px; padding-left:0">End Date</label>
           <input wire:model="endDate" id="endDate" name="endDate" class="form-control" type="datetime-local" step="1"/>
         </div>
-        <div class="p-2 mx-5 w-25">
-          <label for="searchTxt" class="text" style="font-size: 15px; padding-left:0">Search</label>
-          <input id="searchTxt" class="form-control w-100" type="text" step="1">
-        </div>
       </div>       
     </div>
-    
-    <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
-    <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print Report</button>
+    <div class="d-flex flex-row mb-3">
+      <div class="p-2">
+        <button wire:click="preview()" type="button" class="btn btn-md btn-primary ml-3 mb-3 mt-4">Preview</button>
+      </div>
+      <div class="p-2">
+        <button wire:click="print()" type="button" class="btn btn-md btn-success ml-3 mb-3 mt-4">Print</button>
+      </div>
+    </div>
 
     <div class="form-inline">
       <p class="d-inline px-3">Per Page:</p>
@@ -152,7 +156,7 @@ new class extends Component {
           <option>25</option>
       </select>
   </div>
-    <table class="table text-center">
+    <table class="table text-center table-responsive-sm">
         <thead>
           <tr>
             <th style="cursor: pointer" wire:click="sortingBy('id')" scope="col">ID &ensp; @include('partials.sort-icon',['field'=>'id'])</th>
