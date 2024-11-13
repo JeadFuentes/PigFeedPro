@@ -147,7 +147,7 @@ new class extends Component {
     </div>
 
     <div class="form-inline">
-      <p class="d-inline px-3">Per Page:</p>
+      <p class="d-inline px-3 text" style="font-size: 15px;">Per Page:</p>
       <select wire:model="perPage" wire:change='with()' class="rounded d-inline px-3 w-8">
           <option>5</option>
           <option>10</option>
