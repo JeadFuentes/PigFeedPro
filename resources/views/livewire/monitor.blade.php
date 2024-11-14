@@ -17,13 +17,15 @@ new class extends Component {
         // 60 is empty 0 is full
 
         if ($level) {
-            if ($level >= 0 && $level <= 50) {
+            /*if ($level >= 0 && $level <= 50) {
                 $this->level = 100 - $level * 2;
             } elseif ($level > 50) {
                 $this->level = 0;
             } else {
-                $this->level = 0; // Handle negative levels as 0.
-            }
+                $this->level = 0; //Handle negative levels as 0.
+            }*/
+
+            $this->level = $level;
         }
         else {
             $this->level = 0; // Handle null as 0.
