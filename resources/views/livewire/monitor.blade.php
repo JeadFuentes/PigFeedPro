@@ -14,7 +14,6 @@ new class extends Component {
         $level = Sensordata::orderBy('id', 'desc')
                    ->pluck('level')
                    ->first();
-        // 60 is empty 0 is full
 
         if ($level) {
             /*if ($level >= 0 && $level <= 50) {

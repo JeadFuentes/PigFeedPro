@@ -62,56 +62,70 @@ class SensordataController extends Controller
     }
 
     public function monitoring(){
-        $level = Sensordata::orderBy('id', 'desc')
+        $levels = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-         // 60 is empty 0 is full
+        if ($levels) {
+            /*if ($level >= 0 && $level <= 50) {
+                $this->level = 100 - $level * 2;
+            } elseif ($level > 50) {
+                $this->level = 0;
+            } else {
+                $this->level = 0; //Handle negative levels as 0.
+            }*/
 
-         if ($level > 0) {
-            $level = 100 - $level + 10;
-             $level = $level;
-         }
-         else{
-             $level = 0;
-         }
+            $level = $levels;
+        }
+        else {
+            $level = 0; // Handle null as 0.
+        }
 
         return view('monitoring', ['level' => $level]);
     }
 
     public function report(){
-        $level = Sensordata::orderBy('id', 'desc')
+        $levels = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-         // 60 is empty 0 is full
+        if ($levels) {
+            /*if ($level >= 0 && $level <= 50) {
+                $this->level = 100 - $level * 2;
+            } elseif ($level > 50) {
+                $this->level = 0;
+            } else {
+                $this->level = 0; //Handle negative levels as 0.
+            }*/
 
-         if ($level > 0) {
-            $level = 100 - $level + 10;
-             $level = $level;
-         }
-         else{
-             $level = 0;
-         }
+            $level = $levels;
+        }
+        else {
+            $level = 0; // Handle null as 0.
+        }
 
         return view('report', ['level' => $level]);
     }
 
     public function dashboard(){
-        $level = Sensordata::orderBy('id', 'desc')
+        $levels = Sensordata::orderBy('id', 'desc')
         ->pluck('level')
         ->first();
 
-         // 60 is empty 0 is full
-         
+        if ($levels) {
+            /*if ($level >= 0 && $level <= 50) {
+                $this->level = 100 - $level * 2;
+            } elseif ($level > 50) {
+                $this->level = 0;
+            } else {
+                $this->level = 0; //Handle negative levels as 0.
+            }*/
 
-         if ($level > 0) {
-            $level = 100 - $level + 10;
-             $level = $level;
-         }
-         else{
-             $level = 0;
-         }
+            $level = $levels;
+        }
+        else {
+            $level = 0; // Handle null as 0.
+        }
 
         return view('welcome', ['level' => $level]);
     }

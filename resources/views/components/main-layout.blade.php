@@ -40,7 +40,7 @@
                     </li>-->
 
                     <ul class="menu-links" style="padding-left: 0">
-                        @if ($level <= 10)
+                        @if ($level <= 30)
                             <li class="nav-link">
                                 <a href="{{route('dashboard')}}">
                                     <i class='bx bx-home-alt icon' ></i>
