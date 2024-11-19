@@ -17,15 +17,22 @@ new class extends Component {
     public string $status;
 
     public $sortBy = 'id';
-    public $sortDirection = 'asc';
+    public $sortDirection = 'desc';
     public $perPage = 10;
     public $search = '';
+
+    public $processing = false;
 
     #[On('reload')]
     public function with(): array{
         return [
             'feeds' => Feeding::search($this->search)->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage),
         ];
+    }
+
+      //feedNow
+    public function openFeedNow(){
+      $this->dispatch('openFeedNowModal');
     }
     
     public function sortingBy($field){
@@ -67,11 +74,6 @@ new class extends Component {
         $this->redirect(route('dashboard'));
     }
 
-    //feedNow
-    public function openFeedNow(){
-      $this->dispatch('openFeedNowModal');
-    }
-
     public function feedNow(){
       $newDateTime = Carbon::now()->format('Y-m-d H:i:00');
 
@@ -83,7 +85,11 @@ new class extends Component {
         ]);
 
         session()->flash('message', 'Feeded Succesfully');
-        $this->redirect(route('dashboard'));
+        $this->dispatch('opendelay');
+        //sleep(5);
+        //$this->redirect(route('dashboard'));
+        //$this->processAction();
+        //$this->dispatch('close');
     }
 
     //edit
@@ -339,6 +345,30 @@ new class extends Component {
       </div>
     </div>
   <!--end of div-->
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="delayModal" tabindex="-1" aria-labelledby="delayModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="delayModalLabel">Please Wait</h1>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 @script
  <script>
@@ -349,6 +379,33 @@ new class extends Component {
       })
     });
 
+    $wire.on('opendelay', () => {
+      $('#delayModal').modal('show');
+      const totalTime = 50000; 
+      const interval = 100; // Update every 100ms
+
+      // Calculate how much the progress bar should increase per interval
+      const increment = (100 / totalTime) * interval;
+
+      let currentProgress = 0;
+      const progressBar = document.querySelector('.progress-bar');
+
+      // Function to update the progress bar
+      const updateProgressBar = setInterval(() => {
+        currentProgress += increment;
+        progressBar.style.width = `${currentProgress}%`;
+        progressBar.setAttribute('aria-valuenow', Math.round(currentProgress));
+
+        if (currentProgress >= 100) {
+          clearInterval(updateProgressBar);
+        }
+      }, interval);
+
+      // Set a timeout to reload the page
+      setTimeout(() => {
+        location.reload();
+      }, totalTime);
+    });
     $wire.on('openAddNewModal', () => {
       $('#addNewModal').modal('show');
     });

@@ -30,11 +30,31 @@ new class extends Component {
             $this->level = 0; // Handle null as 0.
         }
 
+        if ($this->level <= 30) {
+            $this->dispatch('openNotif');
+        }
 
     }
 }; ?>
 
-<div>
+<div> 
+    <!-- Modal -->
+    <div class="modal fade" id="NotifModal" tabindex="-1" aria-labelledby="NotifModal" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-bg-danger">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Alert</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-danger">Feed Level Is At {{$this->level}}</h3>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
     <div id="levels" class="fu-progress">
         <div class="fu-inner">
           <div class="fu-percent percent"><span>50</span>%</div>
@@ -71,6 +91,10 @@ new class extends Component {
             $('.water').css({
                 top : waterPercent + '%'
             });;
+        });
+
+        $wire.on('openNotif', () => {
+            $('#NotifModal').modal('show');
         });
     </script>
 @endscript
