@@ -30,7 +30,31 @@
                 <p style="margin-bottom: 40px">Automated Pig Feed Monitoring System are revolutionizing pig farming by offering a more efficient, 
                     convenient, and controlled way to feed pigs. This system are designed to dispense feed at predetermined intervals, eliminating 
                     the need for manual feeding and improving overall pig health and productivity.</p>
-                <a href="{{route('dashboard')}}" class="cta-button">Dashboard <i class='bx bxs-log-in-circle'></i></a>
+                <button type="button" class="cta-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Dashboard <i class='bx bxs-log-in-circle'></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="fa-solid fa-hand text-danger"></i> &ensp; Security Check</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('checkpin') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="input_text" class="form-label">Enter PIN:</label>
+                            <input type="text" id="input_text" name="input_text" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
             </div>
         </div>
     </body>

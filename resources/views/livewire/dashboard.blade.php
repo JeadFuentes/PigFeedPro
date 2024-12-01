@@ -345,10 +345,7 @@ new class extends Component {
       </div>
     </div>
   <!--end of div-->
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
+  
 
   <!-- Modal -->
   <div class="modal fade" id="delayModal" tabindex="-1" aria-labelledby="delayModalLabel" aria-hidden="true">

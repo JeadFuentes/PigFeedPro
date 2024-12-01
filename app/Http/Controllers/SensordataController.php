@@ -153,4 +153,20 @@ class SensordataController extends Controller
     {
         //
     }
+
+    public function checkpin(Request $request)
+    {
+        $request->validate([
+            'input_text' => 'required|string',
+        ]);
+
+        // Check if input matches "12345"
+        $inputText = $request->input('input_text');
+        
+        if ($inputText === '12345') {
+            return redirect()->route('dashboard')->with('success', 'The input is correct!');
+        } else {
+            return back()->with('error', 'The input is incorrect. Try again.');
+        }
+    }
 }
